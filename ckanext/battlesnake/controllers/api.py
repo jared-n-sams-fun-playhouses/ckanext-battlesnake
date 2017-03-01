@@ -1,8 +1,21 @@
 from ckan.controllers.api import ApiController
 
+import ckan.lib.base as base
+import ckan.lib.helpers as h
+import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
 import logging
+from pprint import pformat, pprint
+
+try:
+    # CKAN 2.7 and later
+    from ckan.common import config
+except ImportError:
+    # CKAN 2.6 and earlier
+    from pylons import config
+
+import ckanext.battlesnake.logic.get as bs_get
 
 
 # shortcuts
@@ -12,12 +25,16 @@ log = logging.getLogger(u'ckanext.battlesnake.controllers.api')
 
 
 class BSApiController(ApiController):
+	"""
+	Battlesnake Snake Controller
+	"""
 	def __init__(self):
 		self.test = "Hallo?"
 
 	def index(self, ver=None):
 		data_dict = {
-			'test': self.test
+			'test': self.test,
+			'another': bs_get.get_something()
 		}
 		return toolkit.render('battlesnake/index.html', extra_vars=data_dict)
 

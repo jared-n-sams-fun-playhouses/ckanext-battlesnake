@@ -14,17 +14,17 @@ class BattlesnakePlugin(plugins.SingletonPlugin):
         toolkit.add_resource('fanstatic', 'battlesnake')
 
     def before_map(self, map):
-        from routes.mapper import SubMapper
-
         bs_controller = 'ckanext.battlesnake.controllers.api:BSApiController'
-
-        map.connect('battlesnake_index', '/battlesnake', controller=bs_controller, action='index')
 
         # For mapper method conditions
         POST = {
             "method": ['POST']
         }
 
-        with SubMapper(map, controller=bs_controller) as m:
-            m.connect('start', '/start', aciton='start', conditions=POST)
-            m.connect('move', '/move', action='move', conditions=POST)
+        map.connect('battlesnake_index', '/battlesnake', controller=bs_controller, action='index')
+
+        with map.submapper(path_prefix='/battlesnake', controller=bs_controller) as m:
+            m.connect('battlesnake_start', '/start', action='start', conditions=POST)
+            m.connect('battlesnake_move', '/move', action='move', conditions=POST)
+
+        return map
