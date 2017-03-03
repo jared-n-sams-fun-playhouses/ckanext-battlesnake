@@ -1,6 +1,8 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 
+from pprint import pprint, pformat
+
 
 class BattlesnakePlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)

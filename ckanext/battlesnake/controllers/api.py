@@ -15,7 +15,7 @@ except ImportError:
     # CKAN 2.6 and earlier
     from pylons import config
 
-import ckanext.battlesnake.logic.get as bs_get
+import ckanext.battlesnake.helpers as bs_h
 
 
 # shortcuts
@@ -25,31 +25,30 @@ log = logging.getLogger(u'ckanext.battlesnake.controllers.api')
 
 
 class BSApiController(ApiController):
-	"""
-	Battlesnake Snake Controller
-	"""
-	def __init__(self):
-		self.test = "Hallo?"
+    """
+    Battlesnake Snake Controller
+    """
+    def __init__(self):
+        self.test = "Hallo?"
 
-	def index(self, ver=None):
-		data_dict = {
-			'test': self.test,
-			'another': bs_get.get_something()
-		}
-		return toolkit.render('battlesnake/index.html', extra_vars=data_dict)
+    def index(self, ver=None):
+        data_dict = {
+            'test_taunt': bs_h.get_taunt(),
+        }
+        return toolkit.render('battlesnake/index.html', extra_vars=data_dict)
 
-	def start(self, ver=None):
-		data_dict = {
-        	'color': "#6751AE",
-    		'taunt': "TODO taunt",
-        	'head_url': "TODO",
-        	'name': "00buddies"
-		}
-		return self._finish_ok(data_dict)
+    def start(self, ver=None):
+        data_dict = {
+            'color': "#6751AE",
+            'taunt': bs_h.get_taunt(),
+            'head_url': "TODO",
+            'name': "00buddies"
+        }
+        return self._finish_ok(data_dict)
 
-	def move(self, ver=None):
-		data_dict = {
-			'move': "up",
-			'taunt': "TODO taunt"
-		}
-		return self._finish_od(data_dict)
+    def move(self, ver=None):
+        data_dict = {
+            'move': "up",
+            'taunt': "TODO taunt"
+        }
+        return self._finish_ok(data_dict)

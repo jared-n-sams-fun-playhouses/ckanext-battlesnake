@@ -1,2 +1,20 @@
-<div>{{ test }}</div>
-<div>{{ another }}</div>
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _('Battlesnake') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  	<li class="active"><a href="{{ h.url_for('battlesnake_index') }}">{{ _('Battlesnake') }}</a></li>
+{% endblock %}
+
+{% block primary %}
+  <article class="module">
+    <div class="module-content">
+    	{% block about %}
+    		<h1 class="page-heading">Battlesnake 2017</h1>
+    		<div>{{ test_taunt }}</div>
+		{% endblock %}
+    </div>
+  </article>
+{% endblock %}
+
+{% block secondary %}{% endblock %}
