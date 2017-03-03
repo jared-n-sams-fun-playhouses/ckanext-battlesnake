@@ -1,11 +1,13 @@
 from ckan.controllers.api import ApiController
 
+from ckan.common import c
 import ckan.lib.base as base
 import ckan.lib.helpers as h
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
 import logging
+from functools import wraps
 from pprint import pformat, pprint
 
 try:
@@ -24,6 +26,24 @@ _ = toolkit._
 log = logging.getLogger(u'ckanext.battlesnake.controllers.api')
 
 
+def prep_bs_request(endpoint):
+    @wraps(endpoint)
+    def wrapper(self, ver=None):
+        try:
+            game = self._get_request_data(False)
+            pprint(game)
+        except ValueError, e:
+            return self._finish_bad_request(unicode(e))
+
+        if 'width' in game and 'height' in game:
+            board = bs_h.get_empty_board(0, game['width'], game['height'])
+        else:
+            return self._finish_bad_request(_('Missing board size parameters'))
+
+        return endpoint(self, game, board, ver)
+    return wrapper
+
+
 class BSApiController(ApiController):
     """
     Battlesnake Snake Controller
@@ -37,18 +57,27 @@ class BSApiController(ApiController):
         }
         return toolkit.render('battlesnake/index.html', extra_vars=data_dict)
 
-    def start(self, ver=None):
+    @prep_bs_request
+    def start(self, game, board, ver=None):
         data_dict = {
             'color': "#6751AE",
             'taunt': bs_h.get_taunt(),
-            'head_url': "TODO",
+            'head_url': "https://raw.githubusercontent.com/jared-n-sams-fun-playhouses/00buddies-bs/master/static/head.png",
             'name': "00buddies"
         }
         return self._finish_ok(data_dict)
 
-    def move(self, ver=None):
+    @prep_bs_request
+    def move(self, game, board, ver=None):
+        pprint(c)
+        us = bs_h.get_our_snake(game)
+
+        board = bs_h.populate_locations(1, game['food'], board)
+
+        pprint(board)
+
         data_dict = {
-            'move': "up",
-            'taunt': "TODO taunt"
+            'move': 'right',
+            'taunt': bs_h.get_taunt()
         }
         return self._finish_ok(data_dict)

@@ -48,6 +48,10 @@ def get_taunt():
 def get_invalid_points(data):
     bad_coords = []
 
+    if 'snakes' not in data:
+        print('Missing Snakes')
+        return bad_coords
+
     for snake in data['snakes']:
         bad_coords.extend(snake['coords'])
 
@@ -58,8 +62,13 @@ def get_invalid_points(data):
 
 
 def get_our_snake(data):
+    if 'snakes' not in data:
+        print('Missing Snakes')
+        return {}
+
     for snake in data['snakes']:
-        if name == snake['name']:
+        # TODO: move our snake name to config
+        if "00buddies" == snake['name']:
             return snake
     else:
         return {}
@@ -93,3 +102,16 @@ def get_point_from_direction(move, point):
         return [(point[0] + 1), point[1]]
 
     return point
+
+
+def get_empty_board(empty_symbol, width, height):
+    return [[empty_symbol for x in range(width)] for y in range(height)]
+
+
+def populate_locations(mark, points, board):
+    for point in points:
+        x = point[0]
+        y = point[1]
+        board[y][x] = mark
+
+    return board
