@@ -31,7 +31,7 @@ def prep_bs_request(endpoint):
     def wrapper(self, ver=None):
         try:
             game = self._get_request_data(False)
-            pprint(game)
+            #pprint(game)
         except ValueError, e:
             return self._finish_bad_request(unicode(e))
 
@@ -54,6 +54,7 @@ class BSApiController(ApiController):
 
     @prep_bs_request
     def start(self, game, ver=None):
+        print(game)
         data_dict = {
             'color': "#6751AE",
             'taunt': bs_h.get_taunt(),
@@ -81,7 +82,7 @@ class BSApiController(ApiController):
 
         flood_fill(board, game['food'], width, height)
 
-        print("snakes")
+        #print("snakes")
         bs_h.print_board(board)
 
         head = us['coords'][0]
@@ -97,6 +98,7 @@ class BSApiController(ApiController):
         print(next_move)
         return self._finish_ok(data_dict)
 
+
 def find_nearest_food(board, head, available):
     move_dict = {}
     for move in available:
@@ -108,7 +110,6 @@ def find_nearest_food(board, head, available):
 
     print(sorted_moves)
     return sorted_moves[0][0]
-
 
 
 def available_moves(point, width, height):
@@ -144,5 +145,7 @@ def mark_point(turn, point, board, width, height):
 
 
 def flood_fill(board, goals, width, height):
-    for goal in goals:
-        mark_point(2, goal, board, width, height)
+    for y_i, y_v in enumerate(board):
+        for x_i, x_v in enumerate(y_v):
+            if x_v == 1:
+                mark_point(2, [x_i, y_i], board, width, height)
