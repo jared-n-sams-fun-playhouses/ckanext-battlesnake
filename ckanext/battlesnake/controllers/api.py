@@ -83,7 +83,7 @@ class BSApiController(ApiController):
         flood_fill(board, game['food'], width, height)
 
         #print("snakes")
-        bs_h.print_board(board)
+        #bs_h.print_board(board)
 
         head = us['coords'][0]
 
