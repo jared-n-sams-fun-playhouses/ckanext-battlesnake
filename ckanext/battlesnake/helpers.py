@@ -35,13 +35,13 @@ def get_bs_config():
 
 def get_taunt():
     return random.choice([
-        "a suuuuuh dude",
-        "Lean on me",
-        "Who has food?",
-        "I got this boiiizzzz",
-        "#SnakeLife",
-        "You crawl here often?",
-        "Dayyyynk Lmao",
+        "O-oooooooooo",
+        "AAAAE-A-A-I-A-U-",
+        "JO-oooooooooooo",
+        "AAE-O-A-A-U-U-A-",
+        "E-eee-ee-eee AAAAE-A-E-I-E-A-",
+        "JO-ooo-oo-oo-oo",
+        "EEEEO-A-AAA-AAAA",
         ])
 
 
