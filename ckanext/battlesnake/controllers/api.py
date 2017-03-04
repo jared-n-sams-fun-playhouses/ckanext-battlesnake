@@ -7,6 +7,7 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
 import logging
+import random
 from functools import wraps
 from pprint import pformat, pprint
 
@@ -99,6 +100,7 @@ class BSApiController(ApiController):
         return self._finish_ok(data_dict)
 
 def find_nearest_food(board, head, available, stuck, width, height, game):
+    us = bs_h.get_our_snake(game)
 
     move_dict = {}
     for move in available:
@@ -113,6 +115,9 @@ def find_nearest_food(board, head, available, stuck, width, height, game):
 
     if stuck == True:
         return sorted_moves[0][0]
+
+    if us['health_points'] > 65 and len(us['coords']) > 8:
+        return make_smart_move(board, head, width, height, game)
 
     return sorted_moves[0][0]
 
