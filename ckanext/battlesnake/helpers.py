@@ -108,10 +108,15 @@ def get_empty_board(empty_symbol, width, height):
     return [[empty_symbol for x in range(width)] for y in range(height)]
 
 
-def populate_locations(mark, points, board):
+def mark_locations(mark, points, board):
     for point in points:
         x = point[0]
         y = point[1]
         board[y][x] = mark
 
     return board
+
+
+def print_board(board):
+    for row in board:
+        print(row)
