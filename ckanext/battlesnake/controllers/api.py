@@ -72,26 +72,26 @@ class BSApiController(ApiController):
         else:
             return self._finish_bad_request(_('Missing board size parameters'))
 
-        board = bs_h.get_empty_board(0, width, height)
+        board = bs_h.get_empty_board(9000, width, height)
 
-        board = bs_h.mark_locations('f', game['food'], board)
+        board = bs_h.mark_locations(1, game['food'], board)
 
         for snake in game['snakes']:
-            board = bs_h.mark_locations(1, snake['coords'], board)
+            board = bs_h.mark_locations(0, snake['coords'], board)
 
-        board = flood_fill(board, us['coords'][0], game['food'], width, height)
+        flood_fill(board, game['food'], width, height)
 
         print("snakes")
         bs_h.print_board(board)
 
         data_dict = {
-            'move': 'up',
+            'move': 'down',
             'taunt': bs_h.get_taunt()
         }
         return self._finish_ok(data_dict)
 
 
-def available_moves(board, point, width, height):
+def available_moves(point, width, height):
     available = [
         [point[0], point[1] - 1],
         [point[0], point[1] + 1],
@@ -101,23 +101,28 @@ def available_moves(board, point, width, height):
 
     valid = []
 
-    for p in available:
-        if p[0] >= width or p[1] >= height:
+    for move in available:
+        if move[0] < 0 or move[0] >= width:
             continue
 
-        if board[p[1]][p[0]] > 0:
+        if move[1] < 0 or move[1] >= height:
             continue
 
-        valid.append(p)
+        valid.append(move)
 
     return valid
 
 
-def flood_fill(board, start, goals, width, height):
+def mark_point(turn, point, board, width, height):
+    available = available_moves([point[0], point[1]], width, height)
+    for move in available:
+        if board[move[1]][move[0]] == 0 or board[move[1]][move[0]] <= turn:
+            continue
+        else:
+            board[move[1]][move[0]] = turn
+            mark_point(turn + 1, move, board, width, height)
+
+
+def flood_fill(board, goals, width, height):
     for goal in goals:
-        available = available_moves(board, goal, width, height)
-
-        for p in available:
-            board[p[1]][p[0]] = 2
-
-    return board
+        mark_point(2, goal, board, width, height)
