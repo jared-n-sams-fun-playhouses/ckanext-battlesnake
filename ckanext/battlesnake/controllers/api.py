@@ -89,7 +89,7 @@ class BSApiController(ApiController):
 
         moves = available_moves(head, width, height)
 
-        next_move = find_nearest_food(board, head, moves)
+        next_move = find_nearest_food(board, head, moves, False, width, height, game)
 
         data_dict = {
             'move': next_move,
@@ -98,8 +98,8 @@ class BSApiController(ApiController):
         print(next_move)
         return self._finish_ok(data_dict)
 
+def find_nearest_food(board, head, available, stuck, width, height, game):
 
-def find_nearest_food(board, head, available):
     move_dict = {}
     for move in available:
         turn = board[move[1]][move[0]]
@@ -108,9 +108,26 @@ def find_nearest_food(board, head, available):
             move_dict.update({direction:turn})
         sorted_moves = sorted(move_dict.items(),key=lambda x:x[1])
 
-    print(sorted_moves)
+    if sorted_moves[0][1] == 9000 and stuck == False:
+        return make_smart_move(board, head, width, height, game)
+
+    if stuck == True:
+        return sorted_moves[0][0]
+
     return sorted_moves[0][0]
 
+def make_smart_move(board, head, width, height, game):
+    print("building smart move...")
+    board = bs_h.get_empty_board(9000, width, height)
+  
+    for snake in game['snakes']:
+        board = bs_h.mark_locations(0, snake['coords'], board)
+
+    board = bs_h.mark_locations(1, [head], board)
+    flood_fill(board, head, width, height)
+    moves = available_moves(head, width, height)
+
+    return find_nearest_food(board, head, moves, True, width, height, game)
 
 def available_moves(point, width, height):
     available = [
