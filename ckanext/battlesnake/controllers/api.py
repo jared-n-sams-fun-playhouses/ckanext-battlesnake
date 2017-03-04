@@ -84,11 +84,31 @@ class BSApiController(ApiController):
         print("snakes")
         bs_h.print_board(board)
 
+        head = us['coords'][0]
+
+        moves = available_moves(head, width, height)
+
+        next_move = find_nearest_food(board, head, moves)
+
         data_dict = {
-            'move': 'down',
+            'move': next_move,
             'taunt': bs_h.get_taunt()
         }
+        print(next_move)
         return self._finish_ok(data_dict)
+
+def find_nearest_food(board, head, available):
+    move_dict = {}
+    for move in available:
+        turn = board[move[1]][move[0]]
+        if turn != 0:
+            direction = bs_h.get_direction_from_point(head, move)
+            move_dict.update({direction:turn})
+        sorted_moves = sorted(move_dict.items(),key=lambda x:x[1])
+
+    print(sorted_moves)
+    return sorted_moves[0][0]
+
 
 
 def available_moves(point, width, height):
