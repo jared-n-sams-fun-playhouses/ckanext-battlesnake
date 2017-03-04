@@ -58,7 +58,7 @@ class BSApiController(ApiController):
         data_dict = {
             'color': "#6751AE",
             'taunt': bs_h.get_taunt(),
-            'head_url': "https://raw.githubusercontent.com/jared-n-sams-fun-playhouses/00buddies-bs/master/static/head.png",
+            'head_url': "https://i.makeagif.com/media/8-12-2016/QOEcU-.gif",
             'name': "00buddies"
         }
         return self._finish_ok(data_dict)
