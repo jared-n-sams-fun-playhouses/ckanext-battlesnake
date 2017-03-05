@@ -164,8 +164,8 @@ def mark_point(turn, point, board, width, height):
     for move in available:
         if board[move[1]][move[0]] == 0 or board[move[1]][move[0]] <= turn:
             continue
-        
-        if width > 20 and turn > 15:
+
+        if width > 20 and turn > 29:
             continue
 
         board[move[1]][move[0]] = turn
