@@ -102,6 +102,12 @@ class BSApiController(ApiController):
 def find_nearest_food(board, head, available, stuck, width, height, game):
     us = bs_h.get_our_snake(game)
 
+    if us['health_points'] > 65 and len(us['coords']) > 6 and stuck == False:
+        board = bs_h.mark_locations(1, [head], board)
+        flood_fill(board, head, width, height)
+        available = available_moves(head, width, height)
+
+
     move_dict = {}
     for move in available:
         turn = board[move[1]][move[0]]
@@ -115,9 +121,6 @@ def find_nearest_food(board, head, available, stuck, width, height, game):
 
     if stuck == True:
         return sorted_moves[0][0]
-
-    if us['health_points'] > 65 and len(us['coords']) > 8:
-        return make_smart_move(board, head, width, height, game)
 
     return sorted_moves[0][0]
 
