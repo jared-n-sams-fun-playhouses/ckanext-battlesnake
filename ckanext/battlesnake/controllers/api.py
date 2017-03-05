@@ -164,9 +164,12 @@ def mark_point(turn, point, board, width, height):
     for move in available:
         if board[move[1]][move[0]] == 0 or board[move[1]][move[0]] <= turn:
             continue
-        else:
-            board[move[1]][move[0]] = turn
-            mark_point(turn + 1, move, board, width, height)
+        
+        if width > 20 and turn > 15:
+            continue
+
+        board[move[1]][move[0]] = turn
+        mark_point(turn + 1, move, board, width, height)
 
 
 def flood_fill(board, goals, width, height):
