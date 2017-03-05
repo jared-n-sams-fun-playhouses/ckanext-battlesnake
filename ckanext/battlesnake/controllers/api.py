@@ -103,6 +103,7 @@ def find_nearest_food(board, head, available, stuck, width, height, game):
     us = bs_h.get_our_snake(game)
 
     if us['health_points'] > 65 and len(us['coords']) > 6 and stuck == False:
+        board = bs_h.mark_locations(9000, game['food'], board)
         board = bs_h.mark_locations(1, [head], board)
         flood_fill(board, head, width, height)
         available = available_moves(head, width, height)
